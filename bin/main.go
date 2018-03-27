@@ -6,8 +6,7 @@ import (
 	"snowflakeid"
 )
 
-func main() {
-
+func test() {
 	// 生成节点实例
 	node, err := snowflakeid.NewNode(1)
 
@@ -42,4 +41,11 @@ func main() {
 	}
 	// 成功生成 snowflake ID
 	fmt.Println("All ", count, " snowflake ID generate successed!\n")
+}
+
+func main() {
+
+	snowflakeid.InitNode = 1
+	snowflakeid.Start()
+
 }
