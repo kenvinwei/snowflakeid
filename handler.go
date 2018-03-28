@@ -3,6 +3,7 @@ package snowflakeid
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -21,21 +22,20 @@ func getUniqueId(c echo.Context) error {
 	r := &resp{}
 
 	r.Status = "ok"
-	r.Data = makeID(n)
-
-	jdata, _ := json.Marshal(r)
-
-	fmt.Print("%v", r)
-
-	return c.String(http.StatusOK, string(jdata))
+	r.Data = MakeID(n)
+	respData, _ := json.Marshal(r)
+	log.Print(string(respData))
+	return c.String(http.StatusOK, string(respData))
 }
 
-func makeID(num int) []ID {
+func MakeID(num int) []ID {
 	req := []ID{}
 
 	ch := make(chan ID)
 
 	node, err := NewNode(InitNode)
+
+	m := make(map[ID]int)
 
 	if err != nil {
 		// err code ...
@@ -53,10 +53,18 @@ func makeID(num int) []ID {
 	for i := 0; i < num; i++ {
 		id := <-ch
 
+		_, ok := m[id]
+		if ok {
+			fmt.Printf("ID is not unique!\n")
+			break
+		}
+		// 将 id 作为 key 存入 map
+		m[id] = i
+
 		// 将 id 作为 key 存入 map
 		req = append(req, id)
 	}
-
+	//log.Print(req)
 	return req
 
 }
