@@ -17,7 +17,7 @@ snowflake ID 的结构是一个 64 bit 的 int 型数据。
 ```
   go run ./bin/main.go
   
-  curl http://localhost:1323/get/10
+  curl http://localhost:1323/get/1
   
   {
     status: "ok",
